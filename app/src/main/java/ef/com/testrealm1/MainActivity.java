@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.github.tntkhang.realmencryptionhelper.RealmEncryptionHelper;
 
+import java.io.File;
 import java.util.List;
 
 import io.realm.Case;
@@ -26,14 +27,14 @@ public class MainActivity extends AppCompatActivity {
         initRealm2();
     }
 
-    public List<dongnghiaa> getData(Realm passedInRealm) {
-        Log.e("getdb"," bat dau get: ");
-        RealmResults<dongnghiaa> result = passedInRealm.where(dongnghiaa.class).contains("en","sea",Case.INSENSITIVE).findAll();
-        Log.e("getdb"," get xong: "+result.size());
-
-
-        return result;
-    }
+//    public List<dongnghiaa> getData(Realm passedInRealm) {
+//        Log.e("getdb"," bat dau get: ");
+//        RealmResults<dongnghiaa> result = passedInRealm.where(dongnghiaa.class).contains("en","sea",Case.INSENSITIVE).findAll();
+//        Log.e("getdb"," get xong: "+result.size());
+//
+//
+//        return result;
+//    }
 
     private Realm initRealm(){
         RealmEncryptionHelper realmEncryptionHelper = RealmEncryptionHelper.initHelper(this, getString(R.string.app_name));
@@ -56,23 +57,17 @@ public class MainActivity extends AppCompatActivity {
     private void initRealm2(){
         String key= NDM.gena("gionghanh1102");
         Realm.init(this);
-
-        RealmConfiguration config = new RealmConfiguration.Builder()
-           //     .assetFile("default.realm")
-         //       .modules(new MyModule())
-                .name("db.realm")
-//                .readOnly()
-                .encryptionKey(key.getBytes())
-                .build();
-//        Realm.deleteRealm(config);
-
-        Realm.setDefaultConfiguration(config);
-
-
-        Log.e("RealmEncryptionKey", NDM.bytesToHex(key.getBytes()));
-
-
-        Realm.getInstance(config);
+//
+//        RealmConfiguration config = new RealmConfiguration.Builder()
+//                .assetFile("dongnghia.realm")
+//                .name("dongnghia.realm")
+//                .modules(new MyModule())
+//                .build();
+//        Realm.setDefaultConfiguration(config);
+//        Log.e("RealmEncryptionKey", NDM.bytesToHex(key.getBytes()));
+//       Realm realm= Realm.getInstance(config);
+//        File file= new File(MainActivity.this.getFilesDir(),"dongnghia_lock.realm");
+//       realm.writeEncryptedCopyTo(file,key.getBytes());
 
 
     }
