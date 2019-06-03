@@ -1,8 +1,10 @@
 package ef.com.testrealm1;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+
+import com.github.tntkhang.realmencryptionhelper.RealmEncryptionHelper;
 
 import java.util.List;
 
@@ -20,24 +22,60 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        getData(initRealm());
+      //  getData(initRealm());
+        initRealm2();
     }
 
     public List<dongnghiaa> getData(Realm passedInRealm) {
-        RealmResults<dongnghiaa> result = passedInRealm.where(dongnghiaa.class).like("en","sea",Case.INSENSITIVE).findAll();
-        Log.e("abc","result:"+result.size());
+        Log.e("getdb"," bat dau get: ");
+        RealmResults<dongnghiaa> result = passedInRealm.where(dongnghiaa.class).contains("en","sea",Case.INSENSITIVE).findAll();
+        Log.e("getdb"," get xong: "+result.size());
+
+
         return result;
     }
 
     private Realm initRealm(){
+        RealmEncryptionHelper realmEncryptionHelper = RealmEncryptionHelper.initHelper(this, getString(R.string.app_name));
+
         Realm.init(this);
+
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .assetFile("default.realm")
-                .readOnly()
+                .name("db.realm")
+//                .readOnly()
+//                .encryptionKey(realmEncryptionHelper.getEncryptKey())
                 .modules(new MyModule())
+
                 .build();
         Realm.setDefaultConfiguration(config);
-        Realm realm= Realm.getDefaultInstance();
+        Realm realm= Realm.getInstance(config);
         return realm;
     }
+
+    private void initRealm2(){
+        String key= NDM.gena("gionghanh1102");
+        Realm.init(this);
+
+        RealmConfiguration config = new RealmConfiguration.Builder()
+           //     .assetFile("default.realm")
+         //       .modules(new MyModule())
+                .name("db.realm")
+//                .readOnly()
+                .encryptionKey(key.getBytes())
+                .build();
+//        Realm.deleteRealm(config);
+
+        Realm.setDefaultConfiguration(config);
+
+
+        Log.e("RealmEncryptionKey", NDM.bytesToHex(key.getBytes()));
+
+
+        Realm.getInstance(config);
+
+
+    }
+
+
 }
